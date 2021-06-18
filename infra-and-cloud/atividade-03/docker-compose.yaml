@@ -1,0 +1,38 @@
+version: '3'
+services:
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+    networks:
+      - infraandcloudnetwork
+      
+  db:
+    image: mysql:5.7
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpasswordmysql
+      MYSQL_DATABASE: infraandcloud
+      MYSQL_USER: rfranca
+      MYSQL_PASSWORD: rfrancadb
+    volumes:
+      - mysqldata:/var/lib/mysql/
+    networks:
+      - infraandcloudnetwork
+
+#Docker Networks
+networks:
+  infraandcloudnetwork:
+    driver: bridge
+#Volumes
+volumes:
+  mysqldata:
+    driver: local
